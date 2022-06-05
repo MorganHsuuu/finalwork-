@@ -1,15 +1,4 @@
-import ddf.minim.*; //<>//
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
-Minim minim;
-AudioPlayer songbegin;
-AudioPlayer songBoy;
-AudioPlayer songKnight1;
-AudioPlayer songKnight2;
-PImage gamestartBG, gamestartBG_Hover, gamestartBG_Normal;
+PImage gamestartBG, gamestartBG_Hover, gamestartBG_Normal; //<>//
 PImage guide, guide_Hover;
 PImage choose, boy_Hover, boy_Normal, knight_Hover, knight_Normal, g1, g2, g3, back, back_hover;
 PFont font;
@@ -68,7 +57,7 @@ final int BOYBEGIN = 25;
 final int up12 = 0;
 final int down12 = 1;
 final int no12 = 2;
-int moveState = 2; 
+int moveState = 2;
 
 int playerX12, playerY12;
 int bgX12=0;
@@ -252,16 +241,12 @@ Blanket blanket;
 
 void setup() {
   size(640, 480, P2D);
-  minim = new Minim(this);
-  songbegin = minim.loadFile("cute.mp3");
-  songKnight1 = minim.loadFile("TWICE.mp3");
-  songKnight2 = minim.loadFile("oo.mp3");
   font = createFont("font/font.ttf", 30);
   textFont(font);
   gamestartBG = loadImage("img/gamebegin.jpg");
   gamestartBG_Hover = loadImage("img/start_hover.png");
   gamestartBG_Normal = loadImage("img/startNormal.png");
-  guide = loadImage("img/guide.jpg");
+  guide = loadImage("img/boybegin.jpg");
   choose = loadImage("img/choose.jpg");
   knight_Hover = loadImage("img/knighthover.jpg");
   changeto4 = loadImage("img/changeto4.jpg");
@@ -274,13 +259,13 @@ void setup() {
   flow = -640;
 
   // Please load the img here;
-  
-  
+
+
   //boy bonus
   bg12 = loadImage("img/boy2bg.jpg");
   boy = loadImage("img/boy.png");
   upthorn = loadImage("img/thorn up.png");
-  lowthorn = loadImage("img/thorn down.png");  
+  lowthorn = loadImage("img/thorn down.png");
   blanketbonus = loadImage("img/blanketbonus.png");
   uni = loadImage("img/uni.png");
   uni2 = loadImage("img/uni2.png");
@@ -293,16 +278,16 @@ void setup() {
   lowthornsY = new int[11];
   upY12 = new int [11];
   lowY12 = new int [11];
-  for(int i=0;i<=10;i++){
-    upthornsY[i]=floor(random(1,3));
-    lowthornsY[i]=floor(random(-2,3));
-    while(lowthornsY[i]==0)lowthornsY[i]=floor(random(-2,5));
+  for (int i=0; i<=10; i++) {
+    upthornsY[i]=floor(random(1, 3));
+    lowthornsY[i]=floor(random(-2, 3));
+    while (lowthornsY[i]==0)lowthornsY[i]=floor(random(-2, 5));
     upY12[i]=0;
     lowY12[i]=0;
   }
-  
-  
-  
+
+
+
   //BAMBOO
   knight1_background = loadImage("img/Dragon_s Lair.jpg");
   brick = loadImage("img/brick.png");
@@ -323,7 +308,7 @@ void setup() {
   //tree
   treeX = 0;
   treeY = 760;
-  
+
   //Font
   myFont = createFont("jf open 粉圓 1.1", 32);
   textFont(myFont);
@@ -361,17 +346,21 @@ void setup() {
       brickEmp[j] = 0;
     } else if (j == 11) {
       brickEmp[j] = 7;
+    } else if (j == 5) {
+      brickEmp[j] = floor(random(2, 15));
     } else {
-
       do {
+        //println("111");
         brickEmp[j] = floor(random(0, 15));
-      } while (abs(brickEmp[j]-brickEmp[j-1])<3);
+      } while (abs(brickEmp[j]-brickEmp[j-1])<5);
+      print("distant"+j+"  "+abs(brickEmp[j]-brickEmp[j-1]));
     }
     soilHealth[brickEmp[j]][j] = 0;
     soilHealth[brickEmp[j]+1][j] = 0;
+    
   }
   
-   //knight2 plot
+  //knight2 plot
   Page1 = loadImage("img/page1.jpg");
   Page2 = loadImage("img/page2.jpg");
   go42 = loadImage("img/go.png");
@@ -385,17 +374,17 @@ void setup() {
   line42 = loadImage("img/line.png");
   red42 = loadImage("img/red.png");
   blue = loadImage("img/blue.png");
-  
+
   moveDistance = 0;
   speed42 = 2;
   timer42 = 0;
-  
+
 
 
   // morgan
   point = 0 ;
-  bg41 = loadImage("img/background41.jpg");
-  bg42 = loadImage("img/background42.jpg");
+  bg41 = loadImage("img/backgroundb1.jpg");
+  bg42 = loadImage("img/backgroundb.jpg");
   knight = loadImage("img/knight.png");
   dragon4 = loadImage("img/Dragon.png");
   treasureimg = loadImage("img/magicPotion.png");
@@ -420,8 +409,8 @@ void setup() {
     upperhealth[i] = 30;
     lowerhealth[i] = 30;
   }
-   SOLDIER_W = 60;
-   SOLDIER_H = 60;
+  SOLDIER_W = 60;
+  SOLDIER_H = 60;
   treasureTimer = 0;
   fireballTimer = 300;
   treasure_X = 900;
@@ -466,7 +455,6 @@ void draw() {
   switch(gameState) {
 
   case GAME_START:    // Start Screen
-    songbegin.play();
     image(gamestartBG, 0, 0, 640, 480);
     if (START_BUTTON_X + START_BUTTON_WIDTH > mouseX    // hover
       && START_BUTTON_X < mouseX
@@ -521,7 +509,6 @@ void draw() {
       image(knight_Hover, 0, 0);
       if (mousePressed) {
         gameState = GAME_KNIGHT1_FRONT;      // if press button, change to GAME_KNIGHT1
-        songbegin.pause();
         mousePressed = false;
       }
     }
@@ -531,163 +518,182 @@ void draw() {
   case GAME_KNIGHT1_FRONT:
 
     image(first, 0, 0);
+     image(next, 28, 424);
+     if (28+127 > mouseX    // hover to knight
+      && 28 < mouseX
+      && 424+38 > mouseY
+      && 424 < mouseY) {
+          image(nextHover, 28, 424);
     if (mousePressed) {
+    
       gameState = GAME_KNIGHT1;
-     
+      mousePressed = false;
+    }
+      }
+
+    break;
+  case 25:   // boy game begin
+    image(guide, 0, 0);
+    if (mousePressed) {
+      gameState = 20;
+      mousePressed = false;
+    }
+    break;
+  case 20:     // boy game run
+    playerY12=mouseY-BOY_H/2;
+    push();
+    //move
+    if (change12<-1859 ) {
+      change12 = -1860;
+      translate(change12, 0);
+    } else {
+      change12 -= speed12;
+      translate(change12, 0);
+    }
+    //bg blanket unicorn
+    image(bg12, bgX12, 0, 2500, 480);
+    image(blanketbonus, bgX12+2375, 300, BLANKET_W, BLANKET_H);
+    if (unicorn==0) {
+      image(uni, uniX, uniY, 100, 126);
+    } else if (unicorn==1) {
+      image(uni2, uniX, uniY, 104, 127);
+    }
+
+    // show thorn
+    upthornsX = new int [11];
+    lowthornsX = new int[11];
+
+    for (int i=0; i<=10; i++) {
+      if (i<=3) {
+        upthornsX[i]=420+i*75;
+        lowthornsX[i]=800+i*80;
+      } else if (i>3 && i<=7) {
+        upthornsX[i]=420+i*200;
+        lowthornsX[i]=560+i*200;
+      } else if (i>7 && i<=9) {
+        upthornsX[i]=2000+(i-7)*70;
+        lowthornsX[i]=2080+(i-7)*65;
+      } else if (i<9 && i<=10) {
+        upthornsX[i]=2300;
+        lowthornsX[i]=2370;
+      }
+      if (-10+upY12[i]>=0 || -10+upY12[i]<=-40) {
+        upthornsY[i] = -upthornsY[i];
+      }
+      if (340+lowY12[i]<=300 || 340+lowY12[i]>=380) {
+        lowthornsY[i] = -lowthornsY[i];
+      }
+      if (upthornsX[i]!=0 && lowthornsX[i]!=0) {
+        image(upthorn, upthornsX[i], -10+upY12[i]);
+        image(lowthorn, lowthornsX[i], 340+lowY12[i]);
+        upY12[i] += upthornsY[i];
+        lowY12[i] += lowthornsY[i];
+      }
+      //touch
+      if (isHit(upthornsX[i]+20, -10+upY12[i], THORN_W-40, THORN_H-10, playerX12+20, playerY12+10, BOY_W-30, BOY_H-10)==true) {
+        gameState=GAME_LOSE;
+      }
+      if (isHit(lowthornsX[i]+20, 340+lowY12[i]+10, THORN_W-40, THORN_H-20, playerX12+20, playerY12+10, BOY_W-30, BOY_H-10)==true) {
+        gameState=GAME_LOSE;
+      }
+      if (isHit(uniX, uniY, UNI_W, UNI_H, playerX12, playerY12, BOY_W, BOY_H)==true) {
+        unicorn=1;
+      }
+    }
+    //player move limit
+    if (playerY12 < 150 ) {
+      playerY12 = 150;
+    } else if (playerY12 > 300) {
+      playerY12 = 300;
+    }
+
+    if (playerX12<2300)playerX12+=speed12;
+    image(boy, playerX12, playerY12, BOY_W, BOY_H);
+
+    pop();
+    if (playerX12>=2300 && unicorn==1) {
+      gameState=GAME_BONUS;
+    } else if (playerX12>=2300) {
+      gameState=GAME_WIN;
+    }
+
+
+    break;
+
+
+  case   21:   // boy game lose
+    image(lose12, 0, 0, 640, 480);
+    if (mousePressed) {
+      rolling = true;
+      rolling1 = true;
+      rolling2 = true;
+      rolling3 = true;
+      left1 = true;
+      right1 = true;
+      //goDown = true;
+      fireBallX = floor(random(DROP_RANGE));
+      fireBallY = -177;
+      fireBall1X = floor(random(DROP_RANGE));
+      fireBall1Y = -177;
+      fireBall2X = floor(random(DROP_RANGE));
+      fireBall2Y = -177;
+      fireBall3X = floor(random(DROP_RANGE));
+      fireBall3Y = -177;
+      game3 = true;
+      gameState = 3;
+      mousePressed = false;
+    }
+    break;
+  case GAME_WIN:
+    image(win12, 0, 0, 640, 480);
+    if (mousePressed) {
+      rolling = true;
+      rolling1 = true;
+      rolling2 = true;
+      rolling3 = true;
+      left1 = true;
+      right1 = true;
+      //goDown = true;
+      fireBallX = floor(random(DROP_RANGE));
+      fireBallY = -177;
+      fireBall1X = floor(random(DROP_RANGE));
+      fireBall1Y = -177;
+      fireBall2X = floor(random(DROP_RANGE));
+      fireBall2Y = -177;
+      fireBall3X = floor(random(DROP_RANGE));
+      fireBall3Y = -177;
+      game3 = true;
+      gameState = 3;
       mousePressed = false;
     }
 
     break;
-  case 25:   // boy game begin
-   image(guide, 0, 0);
-   if (mousePressed) {
-      gameState = 20;
+  case GAME_BONUS:
+    image(bonus12, 0, 0, 640, 480);
+    if (mousePressed) {
+      rolling = true;
+      rolling1 = true;
+      rolling2 = true;
+      rolling3 = true;
+      left1 = true;
+      right1 = true;
+      //goDown = true;
+      gameState = 3;
+      fireBallX = floor(random(DROP_RANGE));
+      fireBallY = -177;
+      fireBall1X = floor(random(DROP_RANGE));
+      fireBall1Y = -177;
+      fireBall2X = floor(random(DROP_RANGE));
+      fireBall2Y = -177;
+      fireBall3X = floor(random(DROP_RANGE));
+      fireBall3Y = -177;
+      game3 = true;
       mousePressed = false;
     }
-   break;
-  case 20:     // boy game run
-    playerY12=mouseY-BOY_H/2;
-        push();
-        //move 
-        if(change12<-1859 ){
-          change12 = -1860;
-          translate(change12,0);
-        }else{
-          change12 -= speed12;
-          translate(change12,0);
-        }
-        unicorn=0;
-        //bg blanket unicorn
-        image(bg12, bgX12, 0, 2500, 480);
-        image(blanketbonus,bgX12+2375,300,BLANKET_W,BLANKET_H);
-        if(unicorn==0){
-          image(uni, uniX, uniY, 100, 126);
-        }else if(unicorn==1){
-          image(uni2, uniX, uniY, 104, 127);
-        }
-        
-        // show thorn
-        upthornsX = new int [11];
-        lowthornsX = new int[11];
-        
-        for(int i=0;i<=10;i++){
-          if(i<=3){
-            upthornsX[i]=420+i*75;
-            lowthornsX[i]=800+i*80;
-          }else if(i>3 && i<=7){
-            upthornsX[i]=420+i*200;
-            lowthornsX[i]=560+i*200;
-          }else if(i>7 && i<=9){
-            upthornsX[i]=2000+(i-7)*70;
-            lowthornsX[i]=2080+(i-7)*65;
-          }else if(i<9 && i<=10){
-            upthornsX[i]=2300;
-            lowthornsX[i]=2370;
-          }
-          if(-10+upY12[i]>=0 || -10+upY12[i]<=-40){
-            upthornsY[i] = -upthornsY[i];
-          }
-          if(340+lowY12[i]<=300 || 340+lowY12[i]>=380){
-            lowthornsY[i] = -lowthornsY[i];
-          }
-          if(upthornsX[i]!=0 && lowthornsX[i]!=0){
-            image(upthorn,upthornsX[i],-10+upY12[i]);
-            image(lowthorn,lowthornsX[i],340+lowY12[i]);
-            upY12[i] += upthornsY[i];
-            lowY12[i] += lowthornsY[i];
-          }
-          //touch
-          if(isHit(upthornsX[i]+20, -10+upY12[i], THORN_W-40, THORN_H-10, playerX12+20, playerY12+10, BOY_W-30, BOY_H-10)==true){
-               gameState=GAME_LOSE;
-           }
-           if(isHit(lowthornsX[i]+20, 340+lowY12[i]+10, THORN_W-40, THORN_H-20, playerX12+20, playerY12+10, BOY_W-30, BOY_H-10)==true){
-               gameState=GAME_LOSE;
-           }
-           if(isHit(uniX, uniY, UNI_W, UNI_H, playerX12, playerY12, BOY_W, BOY_H)==true){
-             unicorn=1;
-           }
-        }
-        //player move limit
-        if(playerY12 < 150 ){
-          playerY12 = 150;
-        } else if(playerY12 > 300) {
-          playerY12 = 300;
-        }
-        
-        if(playerX12<2300)playerX12+=speed12;
-        image(boy, playerX12, playerY12, BOY_W, BOY_H);
-        
-        pop();
-         if(playerX12>=2300 && unicorn==1){
-           gameState=GAME_BONUS;
-         }else if(playerX12>=2300){
-           gameState=GAME_WIN;
-         }
-         
-  
-        break;
-    
+    break;
 
-   case   21:   // boy game lose   
-   image(lose12, 0, 0, 640, 480);    
-    if (mousePressed) {
-        rolling = true;
-        rolling1 = true;
-        rolling2 = true;
-        rolling3 = true;
-        left1 = true;
-        right1 = true;
-        //goDown = true;
-        fireBallX = floor(random(DROP_RANGE));
-        fireBallY = -177;
-        fireBall1X = floor(random(DROP_RANGE));
-        fireBall1Y = -177;
-        fireBall2X = floor(random(DROP_RANGE));
-        fireBall2Y = -177;
-        fireBall3X = floor(random(DROP_RANGE));
-        fireBall3Y = -177;
-        game3 = true;
-        gameState = 3;
-        mousePressed = false;
-      }
-        break;
-    case GAME_WIN:
-        image(win12, 0, 0, 640, 480);
-         if (mousePressed) {
-        rolling = true;
-        rolling1 = true;
-        rolling2 = true;
-        rolling3 = true;
-        left1 = true;
-        right1 = true;
-        //goDown = true;
-        fireBallX = floor(random(DROP_RANGE));
-        fireBallY = -177;
-        gameState = 3;
-        mousePressed = false;
-      }
-        
-      break;
-      case GAME_BONUS:
-        image(bonus12, 0, 0, 640, 480);
-        if (mousePressed) {
-        rolling = true;
-        rolling1 = true;
-        rolling2 = true;
-        rolling3 = true;
-        left1 = true;
-        right1 = true;
-        //goDown = true;
-        gameState = 3;
-        fireBallX = floor(random(DROP_RANGE));
-        fireBallY = -177;
-        mousePressed = false;
-      }
-      break;     
-    
   case GAME_KNIGHT1:
     game3 = true;
-    songKnight1.play();
     pushMatrix();
     translate(0, max(-1280, 40 * 1 - playerY+120));
 
@@ -695,11 +701,12 @@ void draw() {
     // Background
     image(knight1_background, x, y);
     textSize(20);
-    text("OMG!!我被火龍看到了",500,200);
-    text("趕緊溜啊",60,340);
-    text("注意上方的火球oh!!",410,415);
-    text("恩？？他是哪位？",40,660);
-   
+    text("OMG!!我被火龍看到了", 500, 200);
+    text("趕緊溜啊", 60, 340);
+    text("注意上方的火球oh!!", 410, 415);
+    text("恩？？他是哪位？", 40, 660);
+    text("難道火球會跟蹤我？", 410, 850);
+
     //brick
     for (int i = 0; i<brickNum_col; i++) {
       for (int j = 0; j<brickNum_row; j++) {
@@ -733,16 +740,15 @@ void draw() {
     }
     dragonX += speed;
 
-      //TREE
-    
+    //TREE
+
     image(boy, treeX, treeY);
-    if (isHit(playerX-80, playerY, 80, 80, treeX,treeY, 60, 60)) {
+    if (isHit(playerX-80, playerY, 80, 80, treeX, treeY, 60, 60)) {
       rolling = false;
       rolling1 = false;
       rolling2 = false;
       rolling3 = false;
       left1 = false;
-      //println(left1);
       right1 = false;
       //goDown = false;
       fireBallX = -1000;
@@ -753,15 +759,15 @@ void draw() {
       gameState = 25;
       //println(rolling, rolling1, rolling2, rolling3);
     }
-    
-    
+
+
     // the initial of the bonus
-     upState = false;
-     downState = false;
-     change12=0;
-     playerX12=50;
-     playerY12 = 250;
-   
+    upState = false;
+    downState = false;
+    change12=0;
+    playerX12=50;
+    playerY12 = 250;
+
     // fireball
 
 
@@ -1016,6 +1022,13 @@ void draw() {
         leftFrames = 120;
         fireBallX = floor(random(DROP_RANGE));
         fireBallY = -177;
+        fireBall1X = floor(random(DROP_RANGE));
+        fireBall1Y = -177;
+        fireBall2X = floor(random(DROP_RANGE));
+        fireBall2Y = -177;
+        fireBall3X = floor(random(DROP_RANGE));
+        fireBall3Y = -177;
+        
       }
       if (leftFrames > 0) {
 
@@ -1029,25 +1042,25 @@ void draw() {
         imageMode(CENTER);
         float alpha = (float)leftFrames / initFrames * 255;
         tint(#FA8100, alpha);
-        image(explosionImg, 0, 0, 177, 177);
+        image(explosionImg, 0, 0, 200, 200);
         tint(#FAC800, alpha);
-        image(explosionImg, 0, 0, 177 * 0.8, 177 * 0.8);
+        image(explosionImg, 0, 0, 200 * 0.8, 200 * 0.8);
         tint(#FFF646, alpha);
-        image(explosionImg, 0, 0, 177 * 0.8, 177 * 0.6);
+        image(explosionImg, 0, 0, 200 * 0.8, 200 * 0.6);
         popStyle();
         popMatrix();
         leftFrames--;
       }
 
-      if (kill_playerX-40 < fireBall1X+70 && kill_playerX+120 > fireBall1X && kill_playerY-40 < fireBall1Y+177  && kill_playerY+80 > fireBall1Y) {
+      if (kill_playerX-60 < fireBall1X+70 && kill_playerX+120 > fireBall1X && kill_playerY-60 < fireBall1Y+177  && kill_playerY+80 > fireBall1Y) {
 
         fireBall1Y = -177;
       }
-      if (kill_playerX-40 < fireBall2X+70 && kill_playerX+120 > fireBall2X && kill_playerY-40 < fireBall2Y+177 && kill_playerY+80 > fireBall2Y) {
+      if (kill_playerX-60 < fireBall2X+70 && kill_playerX+120 > fireBall2X && kill_playerY-60 < fireBall2Y+177 && kill_playerY+80 > fireBall2Y) {
 
         fireBall2Y = -177;
       }
-      if (kill_playerX-40 < fireBall3X+70 && kill_playerX+120 > fireBall3X && kill_playerY-40 < fireBall3Y+177 && kill_playerY+80 > fireBall3Y) {
+      if (kill_playerX-60 < fireBall3X+70 && kill_playerX+120 > fireBall3X && kill_playerY-60 < fireBall3Y+177 && kill_playerY+80 > fireBall3Y) {
 
         fireBall3Y = -177;
       }
@@ -1063,53 +1076,52 @@ void draw() {
     popMatrix();
 
     break;
-    case KNIGHT2PLOT:
-    songKnight1.pause();
-    songKnight2.play();
-      image(Page1,0,0);
-      image(mouse,200+moveDistance,290);
-      moveDistance+=speed42;
-      if(moveDistance>130){
-        speed42*=-1;
-      }else if(moveDistance<0){
-        speed42*=-1;
+  case KNIGHT2PLOT:
+
+    image(Page1, 0, 0);
+    //image(mouse, 200+moveDistance, 290);
+    moveDistance+=speed42;
+    if (moveDistance>130) {
+      speed42*=-1;
+    } else if (moveDistance<0) {
+      speed42*=-1;
+    }
+
+    timer42+=1;
+    if (timer42>30) {
+      timer42*=-1;
+    }
+    if (timer42>=0) {
+      image(space1, 410, 295);
+    } else if (timer42<0) {
+      image(space2, 410, 295);
+    }
+
+    if (mouseX>500 && mouseX<500+nextSizeW && mouseY>buttonY && mouseY<buttonY+nextSizeH) {
+      image(nextHover, 500, buttonY);
+      if (mousePressed) {
+        gameState = PAGE_2;
       }
-      
-      timer42+=1;
-      if(timer42>30){
-        timer42*=-1;
-      }
-      if(timer42>=0){
-        image(space1,410,320);
-      }else if(timer42<0){
-        image(space2,410,320);
-      }
-      
-      if(mouseX>500 && mouseX<500+nextSizeW && mouseY>buttonY && mouseY<buttonY+nextSizeH){
-        image(nextHover,500,buttonY);
-        if (mousePressed) {
-            gameState = PAGE_2;
-          }
-      }else{
-        image(next,500,buttonY);
-      }
+    } else {
+      image(next, 500, buttonY);
+    }
     break;
-    
-    case PAGE_2:
-      image(Page2,0,0);      
-      timer42+=1;
-      if(timer42>80){
-        timer42*=-1;
-      }
-      if(timer42>=0){
-        image(blue,80,290);
-        image(magicPotion,500,40);
-      }else if(timer42<0){
-        image(red42,80,290);
-        image(magicPotion,500,40);
-        image(line42,480,30);
-      }
-      if(mouseX>60 && mouseX<60+goSizeW && mouseY>60 && mouseY<60+goSizeH){
+
+  case PAGE_2:
+    image(Page2, 0, 0);
+    timer42+=1;
+    if (timer42>80) {
+      timer42*=-1;
+    }
+    if (timer42>=0) {
+      image(blue, 80, 290);
+      image(magicPotion, 500, 80);
+    } else if (timer42<0) {
+      image(red42, 80, 290);
+      image(magicPotion, 500, 80);
+      image(line42, 480, 80);
+    }
+     if(mouseX>60 && mouseX<60+goSizeW && mouseY>60 && mouseY<60+goSizeH){
         image(goHover,60,60);
         if (mousePressed) {
             gameState = 4;
@@ -1139,12 +1151,13 @@ void draw() {
 
     pushMatrix();
     translate(movePo, 0);
-    fill(195,240,255);
-    rect(0,0,5000,480);
-    //image(bg41, 0, 0, 2500, 480);
-    //image(bg42, 2500, 0, 2500, 480);
-
+    //fill(195, 240, 255);
+    //rect(0, 0, 5000, 480);
     //tint(255,100);
+    image(bg41, 0, 0, 2500, 480);
+    image(bg42, 2500, 0, 2500, 480);
+
+    
 
     //println(movePo);
     if (movePo<-4350) {
@@ -1159,7 +1172,7 @@ void draw() {
       }
     }
 
-    println(move);
+    //println(move);
     movePo += move;
     //print(shoot2);
     if (shoot2) {
@@ -1194,7 +1207,7 @@ void draw() {
           }
         }
       }
-   
+
       if ( abs(knight_X+SOLDIER_W - upperX[shootnumberU])<20 ) {
         upperhealth[shootnumberU] -- ;
         point++;
@@ -1213,7 +1226,7 @@ void draw() {
       } else if (upperhealth[i]>=0) {
         image(upperBarrier3[i], upperX[i], upperY[i], BARRIER_W, BARRIER_H);
         if (upperhealth[i]==0) {
-          
+
           boom = true;
           // boomT = 30;
         }
@@ -1272,7 +1285,6 @@ void draw() {
       if (isHit(knight_X, knight_Y, SOLDIER_W, SOLDIER_H, -movePo-20-gofront+firego, which*50, 50, 50)) {
         image(red, knight_X, knight_Y, SOLDIER_W, SOLDIER_H);
         life -= 3;
-        point--;
       }
       if (firego>800) {
         fireout = false;
@@ -1433,6 +1445,7 @@ void draw() {
         if (isHit(knight_X, knight_Y, 60, 60, -movePo-20, i*60, 50, 50)) {
           image(red, knight_X, knight_Y, SOLDIER_W, SOLDIER_H);
           life--;
+          point--;
         }
       }
     } else {
@@ -1449,12 +1462,13 @@ void draw() {
 
       gofront += go;
       for (int i=0; i<8; i++) {
-       // for (int j=0; j<4; j++) {
-          image(dragon4, -movePo-20-gofront, i*60, 80, 50);
-       // }
+        // for (int j=0; j<4; j++) {
+        image(dragon4, -movePo-20-gofront, i*60, 80, 50);
+        // }
         if (isHit(knight_X, knight_Y, SOLDIER_W, SOLDIER_H, -movePo-20-gofront, i*60, 50, 50)) {
           image(red, knight_X, knight_Y, SOLDIER_W, SOLDIER_H);
           life--;
+          point--;
         }
       }
     }
@@ -1497,8 +1511,8 @@ void draw() {
         knight_Y +=6;
       }
     }
-   
-   
+
+
 
 
 
@@ -1506,18 +1520,18 @@ void draw() {
 
     image(map, 4860, 350, 80, 60);
     popMatrix();
-    
-    
-    
+
+
+
     textAlign(RIGHT, BOTTOM);
     fill(#ffcc00);
- 
+
     textSize(20);
-    text("勇敢分數",620,100);
+    text("勇敢分數", 620, 100);
     textSize(30);
-    text(point,620,130);
-    
-    
+    text(point, 620, 130);
+
+
     if (demoMode2) {
       if (life>60) {
         fill(255);
@@ -1552,9 +1566,9 @@ void draw() {
     textAlign(RIGHT, BOTTOM);
     fill(#ffcc00);
     textSize(20);
-    text("勇敢分數",620,440);
+    text("勇敢分數", 620, 440);
     textSize(30);
-    text(point,620,470);
+    text(point, 620, 470);
     break;
 
 
@@ -1562,13 +1576,13 @@ void draw() {
   case GAME_KNIGHT1_DIE:
     image(knightLose, 0, 0);
     image(back, 498, 423);
-     if(498 + 127 > mouseX    // hover to boy
+    if (498 + 127 > mouseX    // hover to boy
       && 498 < mouseX
       && 423 + 38 > mouseY
-      && 38 < mouseY){
-   image(back_hover, 499, 423);
-     if (mousePressed) {
-         left1 = false;
+      && 38 < mouseY) {
+      image(back_hover, 499, 423);
+      if (mousePressed) {
+        left1 = false;
         right1 = false;
         goDown = false;
         stop = false;
@@ -1594,8 +1608,7 @@ void draw() {
         myFont = createFont("jf open 粉圓 1.1", 32);
         textFont(myFont);
         textAlign(CENTER, CENTER);
-        //tree
-        //treeX = 0;
+        
 
         //Initialize knight
         playerX = PLAYER_INIT_X;
@@ -1634,15 +1647,18 @@ void draw() {
             brickEmp[j] = 0;
           } else if (j == 11) {
             brickEmp[j] = 7;
+          } else if (j == 5) {
+            brickEmp[j] = floor(random(2, 15));
           } else {
 
             do {
               brickEmp[j] = floor(random(0, 15));
-            } while (abs(brickEmp[j]-brickEmp[j-1])<3);
+            } while (abs(brickEmp[j]-brickEmp[j-1])<5);
           }
           soilHealth[brickEmp[j]][j] = 0;
           soilHealth[brickEmp[j]+1][j] = 0;
         }
+
         gameState = 10 ;// if press button, change to GAME_BOY1
         mousePressed = false;
       }
@@ -1651,91 +1667,90 @@ void draw() {
 
   case GAME_KNIGHT2_DIE:
     //print(gameState);
-    songKnight2.pause();
-     image(lose4, 0, 0, 640, 480);
-     
-     image(back, 498, 423);
-     if(498 + 127 > mouseX    // hover to back
+    image(lose4, 0, 0, 640, 480);
+
+    image(back, 498, 423);
+    if (498 + 127 > mouseX    // hover to back
       && 498 < mouseX
       && 423 + 38 > mouseY
-      && 38 < mouseY){
-     image(back_hover, 499, 423);
-     if (mousePressed) {
-      BARRIER_W = 100;
-      BARRIER_H = 400;
-      SPACE = 100;
-       move = 0;
-       movePo = 0;
-       treasure = 0;
-       treasure1 = 0;
-      timer = 400;
-       shoot2 = false;
-       chooseTresure = false;
-      block = false;
-       up = false;
-       left = false;
-       right = false;
-      down = false;
-       gofront=0;
-       go= -2;
-       demoMode2 = true;
-       life = 5*60;
-       fireout = false;
-       firego = 0;
-       fireballTimer = 300;
-       which = 0;
-       boom_X = 0;
-      boom_Y = 0;
-       boomT = 30;
-       boom = false;
-      GAME4 = false;
-      point = 0;
-       for (int i=0; i<10; i++) {
-    upperhealth[i] = 30;
-    lowerhealth[i] = 30;
-  }
-   SOLDIER_W = 60;
-   SOLDIER_H = 60;
-  treasureTimer = 0;
-  fireballTimer = 300;
-  treasure_X = 900;
-  treasure_Y = 200;
-  treasurePo = 0;
-  shootnumberU = 0;
-  for (int i=0; i<10; i++) {
-    int x = floor(random(1, 4));
-    int y = floor(random(1, 4));
-    upperBarrier1[i] = loadImage("img/stone"+x+".png");
-    upperBarrier2[i] = loadImage("img/stone"+x+"_60.png");
-    upperBarrier3[i] = loadImage("img/stone"+x+"_30.png");
+      && 38 < mouseY) {
+      image(back_hover, 499, 423);
+      if (mousePressed) {
+        BARRIER_W = 100;
+        BARRIER_H = 400;
+        SPACE = 100;
+        move = 0;
+        movePo = 0;
+        treasure = 0;
+        treasure1 = 0;
+        timer = 400;
+        shoot2 = false;
+        chooseTresure = false;
+        block = false;
+        up = false;
+        left = false;
+        right = false;
+        down = false;
+        gofront=0;
+        go= -2;
+        demoMode2 = true;
+        life = 5*60;
+        fireout = false;
+        firego = 0;
+        fireballTimer = 300;
+        which = 0;
+        boom_X = 0;
+        boom_Y = 0;
+        boomT = 30;
+        boom = false;
+        GAME4 = false;
+        point = 0;
+        for (int i=0; i<10; i++) {
+          upperhealth[i] = 30;
+          lowerhealth[i] = 30;
+        }
+        SOLDIER_W = 60;
+        SOLDIER_H = 60;
+        treasureTimer = 0;
+        fireballTimer = 300;
+        treasure_X = 900;
+        treasure_Y = 200;
+        treasurePo = 0;
+        shootnumberU = 0;
+        for (int i=0; i<10; i++) {
+          int x = floor(random(1, 4));
+          int y = floor(random(1, 4));
+          upperBarrier1[i] = loadImage("img/stone"+x+".png");
+          upperBarrier2[i] = loadImage("img/stone"+x+"_60.png");
+          upperBarrier3[i] = loadImage("img/stone"+x+"_30.png");
 
-    lowerBarrier1[i] = loadImage("img/stone"+y+".png");
-    lowerBarrier2[i] = loadImage("img/stone"+y+"_60.png");
-    lowerBarrier3[i] = loadImage("img/stone"+y+"_30.png");
+          lowerBarrier1[i] = loadImage("img/stone"+y+".png");
+          lowerBarrier2[i] = loadImage("img/stone"+y+"_60.png");
+          lowerBarrier3[i] = loadImage("img/stone"+y+"_30.png");
 
-    upperX[i] = 500 +BARRIER_INIT_X + i*6* BARRIER_W;
-    upperY[i] = random(-200, 100);
-    lowerX[i] = upperX[i]+BARRIER_W+100;
-    BARRIER_H =  floor(random(200, 300));
-    lowerY[i] = BARRIER_H + SPACE + upperY[i];
-    moveX[i]  = random(0, 4);
-  }
-  for (int i=0; i<3; i++) {
-    Bmove[i] = random(0);
-  }
-  for (int i=5; i<5; i++) {
-    Bmove[i] = random(5);
-  }
-  for (int i=15; i<10; i++) {
-    Bmove[i]  = random(5, 10);
-  }
+          upperX[i] = 500 +BARRIER_INIT_X + i*6* BARRIER_W;
+          upperY[i] = random(-200, 100);
+          lowerX[i] = upperX[i]+BARRIER_W+100;
+          BARRIER_H =  floor(random(200, 300));
+          lowerY[i] = BARRIER_H + SPACE + upperY[i];
+          moveX[i]  = random(0, 4);
+        }
+        for (int i=0; i<3; i++) {
+          Bmove[i] = random(0);
+        }
+        for (int i=5; i<5; i++) {
+          Bmove[i] = random(5);
+        }
+        for (int i=15; i<10; i++) {
+          Bmove[i]  = random(5, 10);
+        }
 
-  knight_X = 300;
-  knight_Y = 300;
-  blanket = new Blanket();
-       
-       
-        gameState = KNIGHT2PLOT ;      // if press button, change to GAME_choose
+        knight_X = 300;
+        knight_Y = 300;
+        blanket = new Blanket();
+
+
+        gameState = 4 ;      // if press button, change to GAME_choose
         mousePressed = false;
       }
     }
@@ -1744,8 +1759,6 @@ void draw() {
 
   case GAME_KNIGHT1_WIN:
     image(carpet, 0, 0);
-    fill(#ffffff);
-    rect(0,0,640,480);
     if (light_BUTTON_X + light_BUTTON_WIDTH > mouseX    // hover to boy
       && light_BUTTON_X < mouseX
       && light_BUTTON_Y + light_BUTTON_HEIGHT > mouseY
@@ -1754,6 +1767,7 @@ void draw() {
       if (mousePressed) {
         image(carpet1, x, y-max(-1280, 40 * 1 - playerY+120));
         gameState = 14 ;      // if press button, change to GAME_BOY1
+
         mousePressed = false;
       }
     }
